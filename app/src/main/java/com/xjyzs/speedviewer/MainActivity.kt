@@ -2,15 +2,12 @@ package com.xjyzs.speedviewer
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,9 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,11 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.xjyzs.speedviewer.ui.theme.SpeedViewerTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
@@ -129,7 +122,7 @@ fun MainUI(modifier: Modifier) {
     Column(modifier.padding(horizontal = 20.dp).fillMaxSize().wrapContentSize(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
         if (location != null) {
             Text("当前速度")
-            Text("%.2f".format(speed*3.6f), fontSize = 96.sp, fontWeight = FontWeight.Bold)
+            Text("%.2f".format(speed*3.6), fontSize = 96.sp, fontWeight = FontWeight.Bold)
             Text("km/h")
             Row {
                 Text("纬度：${"%.6f".format(location?.latitude)}  ")
