@@ -129,7 +129,7 @@ fun MainUI(modifier: Modifier) {
     Column(modifier.padding(horizontal = 20.dp).fillMaxSize().wrapContentSize(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
         if (location != null) {
             Text("当前速度")
-            Text("%.2f".format(speed), fontSize = 96.sp, fontWeight = FontWeight.Bold)
+            Text("%.2f".format(speed*3.6f), fontSize = 96.sp, fontWeight = FontWeight.Bold)
             Text("km/h")
             Row {
                 Text("纬度：${"%.6f".format(location?.latitude)}  ")
