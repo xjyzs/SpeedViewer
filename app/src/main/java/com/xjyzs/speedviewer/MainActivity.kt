@@ -64,27 +64,22 @@ fun MainUI(modifier: Modifier) {
     val scope = rememberCoroutineScope()
     var speed by remember { mutableFloatStateOf(0f) }
 
-    // 位置管理器实例
     val locationManager = remember {
         context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    // 位置监听器（使用remember保持实例稳定）
     val locationListener = remember {
         object : LocationListener {
             override fun onLocationChanged(newLocation: Location) {
                 location = newLocation
                 speed=location!!.speed
             }
-
-            // 其他回调方法保持空实现
             override fun onProviderDisabled(provider: String) {}
             override fun onProviderEnabled(provider: String) {}
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         }
     }
 
-    // 启动位置更新逻辑
     LaunchedEffect(Unit) {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             requestPermissions(context as Activity,if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)}else{arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)}, 2)
@@ -114,8 +109,6 @@ fun MainUI(modifier: Modifier) {
         }
     }
 
-
-    // 界面显示
     Column(modifier.padding(horizontal = 20.dp).fillMaxSize().wrapContentSize(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
         if (location != null) {
             Text("当前速度")
@@ -132,7 +125,6 @@ fun MainUI(modifier: Modifier) {
 }
 
 
-// 启动位置更新
 private fun startLocationUpdates(
     manager: LocationManager,
     listener: LocationListener,
@@ -142,12 +134,11 @@ private fun startLocationUpdates(
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             manager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                1000L,   // 1秒间隔
+                1000L,
                 0f,
                 listener
             )
         } else {
-            // 如果GPS未开启，使用网络定位
             manager.requestLocationUpdates(
                 LocationManager.NETWORK_PROVIDER,
                 5000L,
