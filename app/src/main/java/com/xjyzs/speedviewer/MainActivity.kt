@@ -87,10 +87,7 @@ fun MainUI(modifier: Modifier) {
     // 启动位置更新逻辑
     LaunchedEffect(Unit) {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(context as Activity,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 2)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestPermissions(context as Activity,arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION), 2)
+            requestPermissions(context as Activity,if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)}else{arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)}, 2)
         }
         if (ContextCompat.checkSelfPermission(
                 context,
