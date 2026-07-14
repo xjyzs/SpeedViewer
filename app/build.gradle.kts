@@ -12,8 +12,8 @@ android {
         applicationId = "com.xjyzs.speedviewer"
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         androidResources.localeFilters += listOf("zh")
@@ -30,29 +30,41 @@ android {
 
     flavorDimensions += "abi"
     productFlavors {
+        val signingConfig = if (signingConfigs.findByName("release") != null) {
+            signingConfigs.getByName("release")
+        } else {
+            signingConfigs.getByName("debug")
+        }
         create("x86") {
             dimension = "abi"
             ndk { abiFilters.add("x86") }
-            signingConfig = signingConfigs.getByName("release")
+            this.signingConfig = signingConfig
         }
         create("x86_64") {
             dimension = "abi"
             ndk { abiFilters.add("x86_64") }
-            signingConfig = signingConfigs.getByName("release")
+            this.signingConfig = signingConfig
         }
         create("arm") {
             dimension = "abi"
             ndk { abiFilters.add("armeabi-v7a") }
-            signingConfig = signingConfigs.getByName("release")
+            this.signingConfig = signingConfig
         }
-        create("arm64") {
+        create("arm64Minsdk35") {
             dimension = "abi"
             ndk { abiFilters.add("arm64-v8a") }
-            signingConfig = signingConfigs.getByName("release")
+            minSdk = 35
+            this.signingConfig = signingConfig
+        }
+        create("arm64Minsdk29") {
+            dimension = "abi"
+            ndk { abiFilters.add("arm64-v8a") }
+            minSdk = 29
+            this.signingConfig = signingConfig
         }
         create("universal") {
             dimension = "abi"
-            signingConfig = signingConfigs.getByName("release")
+            this.signingConfig = signingConfig
         }
     }
 
@@ -68,13 +80,23 @@ android {
                     excludes += setOf(
                         "DebugProbesKt.bin",
                         "kotlin-tooling-metadata.json",
-                        "okhttp3/**",
-                        "META-INF/*version*"
+                        "META-INF/**",
+                        "kotlin/**"
                     )
                 }
             }
-            androidResources {
-                noCompress += setOf("so", "arsc")
+            tasks.configureEach {
+                doLast {
+                    outputs.files.forEach { outputDir ->
+                        val filesToDelete = setOf("PublicSuffixDatabase.list")
+                        for (i in filesToDelete) {
+                            val file = outputDir.resolve(i)
+                            if (file.exists()) {
+                                file.delete()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -84,18 +106,18 @@ android {
     }
     buildFeatures {
         compose = true
+        aidl = true
     }
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
+    // implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
+    // implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
