@@ -340,6 +340,14 @@ fun DataDisplay(
                         fontSize = 20.sp
                     )
                     Text(" m")
+                    if (location != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasVerticalAccuracy()) {
+                        Text(
+                            " (±%.1f)".format(location.verticalAccuracyMeters),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
+                        )
+                    }
                 }
             }
             Spacer(Modifier.size(6.dp))
