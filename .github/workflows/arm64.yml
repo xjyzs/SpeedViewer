@@ -1,4 +1,4 @@
-name: Build and Publish arm64 Release APK
+name: Build and Publish arm64Minsdk35Release Release APK
 
 on:
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           echo "${{ secrets.RELEASE_SIGNING_KEY }}" | base64 --decode > keystore.jks
-          ./gradlew assembleArm64Release
+          ./gradlew assembleArm64Minsdk35Release
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
