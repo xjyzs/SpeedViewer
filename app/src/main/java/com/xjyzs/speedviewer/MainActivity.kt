@@ -63,7 +63,6 @@ import java.util.Locale
 import kotlin.math.roundToLong
 import kotlin.time.Duration.Companion.milliseconds
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +118,6 @@ fun MainUI(modifier: Modifier) {
                 if (speed > maxSpeed) maxSpeed = speed
             } else {
                 lastGpsLocation = null
-
                 location = newLocation
             }
         }
@@ -329,6 +327,30 @@ fun DataDisplay(
                         "%.2f".format(maxSpeed * 3.6), fontSize = 20.sp
                     )
                     Text(" km/h")
+                }
+            }
+        }
+        Spacer(Modifier.size(6.dp))
+        Row {
+            WhiteCard(Modifier.weight(1f)) {
+                Text("海拔高度", color = MaterialTheme.colorScheme.secondary)
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        if (location != null && location.hasAltitude()) "%.1f".format(location.altitude) else "--",
+                        fontSize = 20.sp
+                    )
+                    Text(" m")
+                }
+            }
+            Spacer(Modifier.size(6.dp))
+            WhiteCard(Modifier.weight(1f)) {
+                Text("定位精度", color = MaterialTheme.colorScheme.secondary)
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        if (location != null && location.hasAccuracy()) "%.1f".format(location.accuracy) else "--",
+                        fontSize = 20.sp
+                    )
+                    Text(" m")
                 }
             }
         }
